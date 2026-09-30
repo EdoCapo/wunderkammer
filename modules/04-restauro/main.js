@@ -4,6 +4,7 @@ import {
   CURATED_MASTERPIECES,
   searchMuseumArtworks,
   loadCORSImage,
+  createArtisticFallbackCanvas,
 } from '../../src/shared/art-api.js';
 
 // 1. Initialize Room Header
@@ -49,7 +50,9 @@ async function loadArtwork(art) {
     const img = await loadCORSImage(art.url);
     scene.updateArtwork(img);
   } catch (err) {
-    console.warn('Could not load image, keeping fallback:', err);
+    console.warn('Could not load image, using artistic canvas fallback:', err);
+    const fallbackCanvas = createArtisticFallbackCanvas(1024, 1024, art.title, art.artist);
+    scene.updateArtwork(fallbackCanvas);
   }
 }
 
@@ -153,5 +156,5 @@ function animate() {
 
 animate();
 
-// Initial load: Rembrandt
-loadArtwork(CURATED_MASTERPIECES[6]);
+// Initial load: Nighthawks (Hopper)
+loadArtwork(CURATED_MASTERPIECES[0]);

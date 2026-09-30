@@ -7,6 +7,7 @@ export function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
+    img.referrerPolicy = 'no-referrer';
     img.onload = () => resolve(img);
     img.onerror = () => {
       // Create fallback artistic gradient canvas if CORS prevents image load

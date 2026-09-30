@@ -5,7 +5,7 @@ import {
 } from './daily-art.js';
 import {
   searchMuseumArtworks,
-  loadCORSImage,
+  createArtisticFallbackCanvas,
 } from '../../src/shared/art-api.js';
 
 // 1. Initialize Room Header
@@ -103,7 +103,7 @@ try {
 updateFavCount();
 
 // 2. Display Artwork
-async function displayPiece(piece) {
+function displayPiece(piece) {
   currentPiece = piece;
   imageLoader.classList.remove('hidden');
   paintingImg.classList.remove('loaded');
@@ -123,18 +123,42 @@ async function displayPiece(piece) {
 
   updateFavButton();
 
-  // Load Image
-  try {
-    const loadedImg = await loadCORSImage(piece.image);
-    paintingImg.src = loadedImg.src;
+  // Multi-tier resilient image loading (No-Referrer -> Fallback Museum CDN -> Procedural Canvas)
+  const imgToTry = new Image();
+  imgToTry.referrerPolicy = 'no-referrer';
+
+  imgToTry.onload = () => {
+    paintingImg.src = imgToTry.src;
     paintingImg.classList.add('loaded');
-  } catch (err) {
-    console.warn('Image load error, setting direct src:', err);
-    paintingImg.src = piece.image;
-    paintingImg.onload = () => paintingImg.classList.add('loaded');
-  } finally {
     imageLoader.classList.add('hidden');
-  }
+  };
+
+  imgToTry.onerror = () => {
+    console.warn(`Primary image failed (${piece.image}), trying fallbackImage...`);
+    if (piece.fallbackImage && piece.fallbackImage !== piece.image) {
+      const fallbackImg = new Image();
+      fallbackImg.referrerPolicy = 'no-referrer';
+      fallbackImg.onload = () => {
+        paintingImg.src = fallbackImg.src;
+        paintingImg.classList.add('loaded');
+        imageLoader.classList.add('hidden');
+      };
+      fallbackImg.onerror = () => {
+        const fallbackCanvas = createArtisticFallbackCanvas(800, 600, piece.title, piece.artist);
+        paintingImg.src = fallbackCanvas.toDataURL('image/jpeg');
+        paintingImg.classList.add('loaded');
+        imageLoader.classList.add('hidden');
+      };
+      fallbackImg.src = piece.fallbackImage;
+    } else {
+      const fallbackCanvas = createArtisticFallbackCanvas(800, 600, piece.title, piece.artist);
+      paintingImg.src = fallbackCanvas.toDataURL('image/jpeg');
+      paintingImg.classList.add('loaded');
+      imageLoader.classList.add('hidden');
+    }
+  };
+
+  imgToTry.src = piece.image;
 }
 
 // 3. Daily initialization
