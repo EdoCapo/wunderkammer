@@ -2,7 +2,8 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: './', // Cruciale per sub-path su GitHub Pages (username.github.io/wunderkammer/)
+  // Su GitHub Actions imposta il path del repo, in locale usa './'
+  base: process.env.GITHUB_ACTIONS ? '/wunderkammer/' : './',
   build: {
     rollupOptions: {
       input: {
