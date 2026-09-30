@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Il Quadro del Giorno — L'Oracolo della Bellezza | Wunderkammer</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="../../src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Ambient Canvas for Warm Glowing Stardust -->
+    <canvas id="ambientCanvas" class="wk-ambient-canvas"></canvas>
+
+    <!-- Main Experience Container -->
+    <main class="wk-daily-workspace">
+      <!-- Left Column: The Framed Masterpiece -->
+      <section class="wk-painting-stage">
+        <div class="wk-museum-frame" id="frameContainer">
+          <div class="wk-frame-inner">
+            <img id="paintingImg" class="wk-painting-display" src="" alt="Quadro del Giorno" />
+            <div id="imageLoader" class="wk-img-loader">
+              <div class="wk-heart-spinner"></div>
+              <span>Apertura della Pinacoteca...</span>
+            </div>
+          </div>
+          <!-- Gilded Plaque -->
+          <div class="wk-gold-plaque">
+            <span id="plaqueArtist">Gustav Klimt</span>
+            <span class="wk-plaque-dot">•</span>
+            <span id="plaqueTitle" style="font-style: italic;">Il Bacio</span>
+          </div>
+        </div>
+
+        <div class="wk-stage-actions">
+          <button id="btnRandomArt" class="wk-btn wk-btn-gold" title="Scopri un altro quadro e la sua storia">
+            ✦ Sorprendimi con un'altra opera
+          </button>
+          <button id="btnFavorite" class="wk-btn wk-btn-cyan" title="Salva tra le tue opere del cuore">
+            <span id="favIcon">🤍</span>
+            <span id="favLabel">Salva nei Preferiti</span>
+          </button>
+          <button id="btnOpenFavorites" class="wk-btn" title="Vedi la tua galleria dei preferiti">
+            Le Mie Opere (<span id="favCount">0</span>)
+          </button>
+        </div>
+      </section>
+
+      <!-- Right Column: The Story & Poetic Soul -->
+      <aside class="wk-story-sidebar">
+        <!-- Date & Sanctuary Header -->
+        <div class="wk-story-calendar">
+          <span class="wk-calendar-pill" id="displayDate">Mercoledì, 30 Settembre</span>
+          <span class="wk-sanctuary-tag">ORIS DELLA BELLEZZA</span>
+        </div>
+
+        <!-- Masterpiece Identity -->
+        <header class="wk-piece-identity">
+          <h1 class="wk-piece-title" id="pieceTitle">Il Bacio (Der Kuss)</h1>
+          <p class="wk-piece-artist" id="pieceArtist">Gustav Klimt</p>
+          <div class="wk-piece-meta">
+            <span id="pieceYear" class="wk-meta-chip">1907–1908</span>
+            <span id="pieceMuseum" class="wk-meta-chip">Österreichische Galerie Belvedere, Vienna</span>
+          </div>
+        </header>
+
+        <!-- The Narrative Story -->
+        <article class="wk-story-section">
+          <h3 class="wk-section-heading">✦ La Storia del Dipinto</h3>
+          <div class="wk-story-body" id="pieceStory">
+            <!-- Populated dynamically with thoughtful paragraphs -->
+          </div>
+        </article>
+
+        <!-- Secret Detail Quest -->
+        <div class="wk-quest-card">
+          <div class="wk-quest-header">
+            <span class="wk-quest-icon">🔍</span>
+            <span class="wk-quest-title">UN DETTAGLIO SEGRETO DA CERCARE</span>
+          </div>
+          <p class="wk-quest-text" id="pieceDetail">
+            Osserva le dita della donna...
+          </p>
+        </div>
+
+        <!-- Comfort Thought / Pensiero per Te -->
+        <div class="wk-comfort-card">
+          <div class="wk-comfort-header">
+            <span class="wk-comfort-icon">💌</span>
+            <span class="wk-comfort-title">UN PENSIERO PER TE</span>
+          </div>
+          <p class="wk-comfort-text" id="pieceComfort">
+            L'oro non sbiadisce mai col tempo...
+          </p>
+        </div>
+
+        <!-- Live Museum Search Input -->
+        <div class="wk-explore-panel">
+          <div class="wk-explore-title">CERCA UN'ALTRA OPERA NEL MONDO</div>
+          <div class="wk-search-box">
+            <input type="text" id="inputArtSearch" placeholder="Cerca un artista o quadro (es. Monet, Renoir, Klimt)..." class="wk-search-input" />
+            <button id="btnSearch" class="wk-btn wk-btn-sm wk-btn-cyan">Cerca</button>
+          </div>
+          <div class="wk-search-results" id="searchResults"></div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Favorites Modal -->
+    <div id="favModal" class="wk-modal-overlay">
+      <div class="wk-modal-dialog">
+        <div class="wk-modal-header">
+          <h3>LE TUE OPERE DEL CUORE</h3>
+          <button id="btnCloseModal" class="wk-close-btn">&times;</button>
+        </div>
+        <div class="wk-modal-content" id="favListContainer">
+          <!-- Populated from localStorage -->
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

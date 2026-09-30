@@ -40,7 +40,7 @@ export class RoomHeader {
       </a>
 
       <div class="wk-room-title">
-        <span>${this.roomNumber}. ${this.roomTitle}</span>
+        <span>${this.roomNumber ? (this.roomNumber.includes('✦') ? `${this.roomNumber} ${this.roomTitle}` : `${this.roomNumber}. ${this.roomTitle}`) : this.roomTitle}</span>
         ${this.badgeText ? `<span class="wk-room-badge">${this.badgeText}</span>` : ''}
       </div>
 

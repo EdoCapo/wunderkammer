@@ -14,6 +14,7 @@ export default defineConfig({
         restauro: resolve(__dirname, 'modules/04-restauro/index.html'),
         frequenza: resolve(__dirname, 'modules/05-frequenza/index.html'),
         chimera: resolve(__dirname, 'modules/06-chimera/index.html'),
+        quadro: resolve(__dirname, 'modules/07-quadro-del-giorno/index.html'),
       },
     },
   },

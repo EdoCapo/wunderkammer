@@ -1,0 +1,469 @@
+/* Stanza 07 — Il Quadro del Giorno (L'Oracolo della Bellezza) */
+
+.wk-ambient-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.wk-daily-workspace {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--header-height);
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  background: radial-gradient(circle at 40% 30%, #151821 0%, var(--bg-void) 90%);
+  overflow-x: hidden;
+}
+
+/* Left Column: Museum Stage */
+.wk-painting-stage {
+  flex: 1.1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  position: relative;
+}
+
+.wk-museum-frame {
+  position: relative;
+  max-width: 580px;
+  width: 100%;
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #111317;
+  padding: 18px 18px 36px 18px;
+  border-radius: var(--radius-sm);
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.9),
+    0 0 0 8px #1c1813,
+    0 0 0 11px var(--gold-primary),
+    0 0 0 15px #14110d,
+    0 0 45px rgba(212, 175, 55, 0.25);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.wk-museum-frame:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 30px 70px rgba(0, 0, 0, 0.95),
+    0 0 0 8px #1c1813,
+    0 0 0 11px var(--gold-bright),
+    0 0 0 15px #14110d,
+    0 0 60px rgba(212, 175, 55, 0.35);
+}
+
+.wk-frame-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #090a0c;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.wk-painting-display {
+  max-width: 100%;
+  max-height: 58vh;
+  object-fit: contain;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  border-radius: 1px;
+}
+
+.wk-painting-display.loaded {
+  opacity: 1;
+}
+
+.wk-img-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: #090a0c;
+  color: var(--gold-primary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  z-index: 5;
+  transition: opacity 0.4s ease;
+}
+
+.wk-img-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wk-heart-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(212, 175, 55, 0.2);
+  border-top-color: var(--gold-primary);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Plaque */
+.wk-gold-plaque {
+  position: absolute;
+  bottom: 8px;
+  background: linear-gradient(180deg, #24201a 0%, #151310 100%);
+  border: 1px solid var(--border-gold);
+  padding: 0.25rem 0.85rem;
+  border-radius: 2px;
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-bright);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.wk-plaque-dot {
+  color: var(--gold-dim);
+}
+
+/* Actions */
+.wk-stage-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Right Column: Story Sidebar */
+.wk-story-sidebar {
+  flex: 0.95;
+  background: var(--bg-glass-strong);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-left: 1px solid var(--border-subtle);
+  padding: 2.5rem 2.8rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+@media (max-width: 1024px) {
+  .wk-daily-workspace {
+    flex-direction: column;
+  }
+  .wk-story-sidebar {
+    border-left: none;
+    border-top: 1px solid var(--border-subtle);
+    padding: 2rem 1.5rem;
+  }
+}
+
+.wk-story-calendar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wk-calendar-pill {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-primary);
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid var(--border-gold);
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+}
+
+.wk-sanctuary-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--cyan-diagnostic);
+}
+
+/* Identity */
+.wk-piece-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--gold-primary);
+  line-height: 1.25;
+  margin-bottom: 0.4rem;
+  text-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+}
+
+.wk-piece-artist {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-style: italic;
+  color: var(--text-main);
+  opacity: 0.9;
+  margin-bottom: 0.8rem;
+}
+
+.wk-piece-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.wk-meta-chip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Narrative Story */
+.wk-story-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wk-section-heading {
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+
+.wk-story-body {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--text-main);
+  opacity: 0.92;
+  white-space: pre-line;
+}
+
+/* Quest Card */
+.wk-quest-card {
+  background: rgba(22, 25, 32, 0.85);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.wk-quest-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.wk-quest-title {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+
+.wk-quest-text {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+/* Comfort Card */
+.wk-comfort-card {
+  background: linear-gradient(135deg, rgba(45, 25, 30, 0.6) 0%, rgba(25, 20, 32, 0.8) 100%);
+  border: 1px solid rgba(255, 140, 160, 0.25);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 4px 25px rgba(255, 120, 150, 0.08);
+}
+
+.wk-comfort-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.wk-comfort-title {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  color: #ffb8c6;
+  font-weight: 700;
+}
+
+.wk-comfort-text {
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: #fff0f3;
+}
+
+/* Explore Panel */
+.wk-explore-panel {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.wk-explore-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 0.65rem;
+}
+
+.wk-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.wk-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wk-result-item:hover {
+  border-color: var(--gold-primary);
+  background: var(--bg-panel-elevated);
+}
+
+.wk-result-title {
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  color: var(--gold-primary);
+}
+
+.wk-result-artist {
+  font-family: var(--font-serif);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* Favorites Modal */
+.wk-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.wk-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wk-modal-dialog {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  max-width: 600px;
+  width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+}
+
+.wk-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.wk-modal-header h3 {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  color: var(--gold-primary);
+  letter-spacing: 0.12em;
+}
+
+.wk-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.wk-close-btn:hover {
+  color: #fff;
+}
+
+.wk-modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wk-fav-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wk-fav-card:hover {
+  border-color: var(--gold-primary);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.wk-fav-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 2px;
+}

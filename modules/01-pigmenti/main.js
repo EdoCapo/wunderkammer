@@ -443,4 +443,11 @@ document.getElementById('btnExport').addEventListener('click', () => {
 // Initial boot
 resizeCanvases();
 updateMortarMix();
-loadRenaissanceBozzetto();
+loadCORSImage(CURATED_MASTERPIECES[0].url)
+  .then((img) => {
+    currentBaseImage = img;
+    renderFullScene();
+  })
+  .catch(() => {
+    loadRenaissanceBozzetto();
+  });

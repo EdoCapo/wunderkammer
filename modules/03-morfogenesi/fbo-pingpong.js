@@ -42,16 +42,24 @@ export class PingPongFBO {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-      // Allocate storage: RGBA32F preferred
+      // Try RGBA32F, with fallback to RGBA16F or RGBA
+      let internalFormat = gl.RGBA32F;
+      let type = gl.FLOAT;
+
+      if (!gl.getExtension('EXT_color_buffer_float')) {
+        internalFormat = gl.RGBA;
+        type = gl.UNSIGNED_BYTE;
+      }
+
       gl.texImage2D(
         gl.TEXTURE_2D,
         0,
-        gl.RGBA32F,
+        internalFormat,
         this.width,
         this.height,
         0,
         gl.RGBA,
-        gl.FLOAT,
+        type,
         null
       );
 
