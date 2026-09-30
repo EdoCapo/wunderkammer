@@ -1,0 +1,194 @@
+/* Stanza 03 — Morfogenesi su Tela (Gray-Scott WebGL2) */
+
+.wk-morfogenesi-workspace {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #10151c 0%, var(--bg-void) 90%);
+}
+
+.wk-viewport-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.wk-canvas-frame {
+  position: relative;
+  width: min(840px, 90vw);
+  height: min(600px, 72vh);
+  background: #000;
+  border-radius: var(--radius-sm);
+  box-shadow: 
+    0 18px 45px rgba(0, 0, 0, 0.8),
+    0 0 0 1px var(--border-subtle),
+    0 0 30px rgba(212, 175, 55, 0.15);
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.wk-gl-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.wk-overlay-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(9, 10, 12, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--gold-bright);
+  pointer-events: none;
+  animation: fade-hint 6s forwards ease-in-out;
+}
+
+@keyframes fade-hint {
+  0%, 70% { opacity: 0.9; }
+  100% { opacity: 0.25; }
+}
+
+.wk-canvas-actions {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.wk-btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+}
+
+/* Sidebar */
+.wk-morfogenesi-sidebar {
+  width: 420px;
+  min-width: 360px;
+  max-width: 440px;
+  height: 100%;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .wk-morfogenesi-workspace {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .wk-morfogenesi-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+  .wk-canvas-frame {
+    width: 95vw;
+    height: 50vh;
+  }
+}
+
+/* Presets */
+.wk-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wk-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.6rem 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wk-preset-btn:hover {
+  border-color: var(--border-gold);
+  background: var(--bg-panel-elevated);
+}
+
+.wk-preset-btn.active {
+  border-color: var(--gold-primary);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.wk-preset-title {
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  color: var(--gold-primary);
+}
+
+.wk-preset-sub {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Palette Grid */
+.wk-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.wk-palette-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wk-palette-btn:hover {
+  border-color: var(--border-medium);
+  background: var(--bg-panel-elevated);
+}
+
+.wk-palette-btn.active {
+  border-color: var(--cyan-diagnostic);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+  color: var(--cyan-diagnostic);
+}
+
+.wk-palette-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}

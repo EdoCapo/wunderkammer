@@ -1,0 +1,198 @@
+/* Stanza 05 — La Frequenza dell'Arte (FFT 2D & Web Audio) */
+
+.wk-frequenza-workspace {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #10141a 0%, var(--bg-void) 90%);
+}
+
+.wk-triptych-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.wk-triptych-grid {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 980px;
+}
+
+.wk-triptych-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  transition: border-color var(--transition-fast);
+}
+
+.wk-triptych-card:hover {
+  border-color: var(--border-gold);
+}
+
+.wk-card-title {
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--gold-primary);
+  margin-bottom: 0.65rem;
+}
+
+.wk-screen-box {
+  position: relative;
+  width: 256px;
+  height: 256px;
+  background: #000;
+  border-radius: 2px;
+  border: 1px solid #1a1e24;
+  overflow: hidden;
+}
+
+.wk-screen-box canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#ringsCanvas {
+  pointer-events: none;
+}
+
+.wk-canvas-actions {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+  align-items: center;
+}
+
+.wk-btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+}
+
+/* Sidebar */
+.wk-frequenza-sidebar {
+  width: 420px;
+  min-width: 360px;
+  max-width: 440px;
+  height: 100%;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .wk-frequenza-workspace {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .wk-frequenza-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+}
+
+/* Presets */
+.wk-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wk-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.6rem 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wk-preset-btn:hover {
+  border-color: var(--border-gold);
+  background: var(--bg-panel-elevated);
+}
+
+.wk-preset-btn.active {
+  border-color: var(--gold-primary);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.wk-preset-title {
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  color: var(--gold-primary);
+}
+
+.wk-preset-sub {
+  font-family: var(--font-serif);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* 8 Concentric Radial Bands Meters */
+.wk-bands-meters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.wk-band-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.wk-band-label {
+  width: 90px;
+  color: var(--text-muted);
+}
+
+.wk-meter-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.wk-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-primary), var(--cyan-diagnostic));
+  width: 0%;
+  transition: width 0.1s ease-out;
+}

@@ -1,0 +1,162 @@
+/* Stanza 04 — Luce Radente & Tavolo 3D */
+
+.wk-restauro-workspace {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  background: radial-gradient(circle at 45% 45%, #15161c 0%, var(--bg-void) 90%);
+}
+
+.wk-viewport-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.wk-canvas-frame {
+  position: relative;
+  width: min(840px, 90vw);
+  height: min(600px, 72vh);
+  background: #090a0c;
+  border-radius: var(--radius-sm);
+  box-shadow: 
+    0 22px 50px rgba(0, 0, 0, 0.85),
+    0 0 0 1px var(--border-subtle),
+    0 0 35px rgba(212, 175, 55, 0.15);
+  overflow: hidden;
+  cursor: grab;
+}
+
+.wk-canvas-frame:active {
+  cursor: grabbing;
+}
+
+.wk-overlay-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(9, 10, 12, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--gold-bright);
+  pointer-events: none;
+  animation: fade-hint 6s forwards ease-in-out;
+}
+
+@keyframes fade-hint {
+  0%, 70% { opacity: 0.9; }
+  100% { opacity: 0.25; }
+}
+
+.wk-canvas-actions {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.wk-btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+}
+
+/* Sidebar */
+.wk-restauro-sidebar {
+  width: 420px;
+  min-width: 360px;
+  max-width: 440px;
+  height: 100%;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .wk-restauro-workspace {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .wk-restauro-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+  .wk-canvas-frame {
+    width: 95vw;
+    height: 50vh;
+  }
+}
+
+/* Spectral Grid */
+.wk-spectral-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wk-spectral-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wk-spectral-btn:hover {
+  border-color: var(--border-gold);
+  background: var(--bg-panel-elevated);
+}
+
+.wk-spectral-btn.active {
+  border-color: var(--gold-primary);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+}
+
+.wk-spectral-icon {
+  font-size: 1.4rem;
+}
+
+.wk-spectral-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.wk-spectral-name {
+  font-family: var(--font-title);
+  font-size: 0.84rem;
+  color: var(--gold-primary);
+}
+
+.wk-spectral-desc {
+  font-family: var(--font-serif);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}

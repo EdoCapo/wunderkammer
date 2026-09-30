@@ -6,12 +6,150 @@
     <title>Stanza 02 — La Geometria Invisibile & Gestalt | Wunderkammer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="../../src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div style="padding: 100px 2rem; text-align: center;">
-      <h1 style="font-family: var(--font-title); color: var(--gold-primary);">STANZA 02: LA GEOMETRIA INVISIBILE</h1>
-      <p style="color: var(--text-muted); margin-top: 1rem;">Inizializzazione tensori di Scharr e simulatore saccadico Itti-Koch...</p>
-      <a href="../../index.html" class="wk-btn wk-btn-gold" style="margin-top: 2rem;">← Torna all'Archivio</a>
-    </div>
+    <!-- Main Workspace -->
+    <main class="wk-gestalt-workspace">
+      <!-- Visual Canvas & Viewport -->
+      <div class="wk-viewport-container">
+        <div class="wk-canvas-frame">
+          <canvas id="baseCanvas" class="wk-layer-canvas"></canvas>
+          <canvas id="vectorCanvas" class="wk-layer-canvas"></canvas>
+          <canvas id="scanpathCanvas" class="wk-layer-canvas"></canvas>
+        </div>
+
+        <div class="wk-canvas-actions">
+          <button id="btnResetScanpath" class="wk-btn wk-btn-sm" title="Riavvia la traiettoria dello sguardo">
+            Riavvia Saccadi
+          </button>
+          <label class="wk-btn wk-btn-sm wk-btn-cyan" style="cursor: pointer;">
+            Carica Opera
+            <input type="file" id="inputCustomImage" accept="image/*" style="display: none;" />
+          </label>
+          <button id="btnExportSpecimen" class="wk-btn wk-btn-sm wk-btn-gold" title="Esporta mappa diagnostica">
+            Esporta Analisi
+          </button>
+        </div>
+      </div>
+
+      <!-- Laboratory HUD & Controls Sidebar -->
+      <aside class="wk-gestalt-sidebar">
+        <!-- Panel 1: Masterpiece Selector -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>CORPUS ICONOGRAFICO</span>
+            <span class="wk-badge-count">PRESET</span>
+          </div>
+
+          <div class="wk-preset-list" id="presetList">
+            <button class="wk-preset-btn active" data-preset="monalisa">
+              <span class="wk-preset-title">Leonardo da Vinci</span>
+              <span class="wk-preset-sub">Monna Lisa (1503-1506)</span>
+            </button>
+            <button class="wk-preset-btn" data-preset="venere">
+              <span class="wk-preset-title">Sandro Botticelli</span>
+              <span class="wk-preset-sub">Nascita di Venere (1485)</span>
+            </button>
+            <button class="wk-preset-btn" data-preset="vermeer">
+              <span class="wk-preset-title">Johannes Vermeer</span>
+              <span class="wk-preset-sub">Ragazza con l'Orecchino (1665)</span>
+            </button>
+            <button class="wk-preset-btn" data-preset="piero">
+              <span class="wk-preset-title">Piero della Francesca</span>
+              <span class="wk-preset-sub">Battesimo di Cristo (1450)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 2: Diagnostic Multi-Layer Switches -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>STRATI DIAGNOSTICI</span>
+            <span class="wk-math-tag">VISIONE</span>
+          </div>
+
+          <div class="wk-toggle-group">
+            <label class="wk-checkbox-label">
+              <input type="checkbox" id="chkImage" checked />
+              <span class="wk-checkmark"></span>
+              <span>Dipinto Originale</span>
+            </label>
+            <label class="wk-checkbox-label">
+              <input type="checkbox" id="chkHeatmap" />
+              <span class="wk-checkmark"></span>
+              <span>Mappa di Salienza Termica (Itti-Koch)</span>
+            </label>
+            <label class="wk-checkbox-label">
+              <input type="checkbox" id="chkField" checked />
+              <span class="wk-checkmark"></span>
+              <span>Campi di Forza Tensoriali (Scharr)</span>
+            </label>
+            <label class="wk-checkbox-label">
+              <input type="checkbox" id="chkScanpath" checked />
+              <span class="wk-checkmark"></span>
+              <span>Traiettoria Saccadica & Fissazioni</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Panel 3: Physics & Saccade Parameters -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>PARAMETRI PSICOFISICI</span>
+            <span class="wk-mono-tag">HUD</span>
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Densità Vettori Isolinee</span>
+              <span class="wk-control-value" id="valDensity">14px</span>
+            </label>
+            <input type="range" id="sliderDensity" class="wk-slider" min="8" max="28" value="14" step="2" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Soglia Gradiente Minimo</span>
+              <span class="wk-control-value" id="valThreshold">0.08</span>
+            </label>
+            <input type="range" id="sliderThreshold" class="wk-slider" min="1" max="40" value="8" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Fissazioni Attive Max</span>
+              <span class="wk-control-value" id="valMaxFix">18</span>
+            </label>
+            <input type="range" id="sliderMaxFix" class="wk-slider" min="6" max="35" value="18" />
+          </div>
+        </div>
+
+        <!-- Panel 4: Real-time Eye Movement Telemetry -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>TELEMETRIA OCULARE</span>
+            <span class="wk-mono-tag" id="telemetryStatus">IN CORSO</span>
+          </div>
+
+          <div class="wk-telemetry-grid">
+            <div class="wk-telemetry-box">
+              <span class="wk-telemetry-num" id="statFixCount">0</span>
+              <span class="wk-telemetry-label">Fissazioni Totali</span>
+            </div>
+            <div class="wk-telemetry-box">
+              <span class="wk-telemetry-num" id="statAvgDwell">380 ms</span>
+              <span class="wk-telemetry-label">Dwell Time Medio</span>
+            </div>
+          </div>
+
+          <p class="wk-annotation" style="margin-top: 1rem;">
+            <strong>Principio di Arnheim:</strong> L'occhio non scruta passivamente ma segue le linee di tensione strutturale dell'opera, bilanciando pesi visivi e punti di convergenza focale.
+          </p>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module" src="main.js"></script>
   </body>
 </html>

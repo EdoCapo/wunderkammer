@@ -1,0 +1,222 @@
+/* Stanza 02 — La Geometria Invisibile & Gestalt */
+
+.wk-gestalt-workspace {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #12151b 0%, var(--bg-void) 90%);
+}
+
+.wk-viewport-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.wk-canvas-frame {
+  position: relative;
+  width: min(840px, 90vw);
+  height: min(600px, 72vh);
+  background: #090a0c;
+  border-radius: var(--radius-sm);
+  box-shadow: 
+    0 18px 45px rgba(0, 0, 0, 0.75),
+    0 0 0 1px var(--border-subtle),
+    0 0 25px rgba(0, 229, 255, 0.1);
+  overflow: hidden;
+}
+
+.wk-layer-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#baseCanvas { z-index: 1; }
+#vectorCanvas { z-index: 2; pointer-events: none; }
+#scanpathCanvas { z-index: 3; pointer-events: none; }
+
+.wk-canvas-actions {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.wk-btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+}
+
+/* Sidebar */
+.wk-gestalt-sidebar {
+  width: 420px;
+  min-width: 360px;
+  max-width: 440px;
+  height: 100%;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .wk-gestalt-workspace {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .wk-gestalt-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+  .wk-canvas-frame {
+    width: 95vw;
+    height: 50vh;
+  }
+}
+
+/* Presets */
+.wk-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wk-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wk-preset-btn:hover {
+  border-color: var(--border-gold);
+  background: var(--bg-panel-elevated);
+}
+
+.wk-preset-btn.active {
+  border-color: var(--gold-primary);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.wk-preset-title {
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  color: var(--gold-primary);
+}
+
+.wk-preset-sub {
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Checkbox Layer Toggles */
+.wk-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wk-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  cursor: pointer;
+  user-select: none;
+}
+
+.wk-checkbox-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.wk-checkmark {
+  width: 16px;
+  height: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.wk-checkbox-label input:checked ~ .wk-checkmark {
+  background: var(--gold-primary);
+  border-color: var(--gold-bright);
+}
+
+.wk-checkmark::after {
+  content: '';
+  display: none;
+  width: 4px;
+  height: 8px;
+  border: solid #090a0c;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.wk-checkbox-label input:checked ~ .wk-checkmark::after {
+  display: block;
+}
+
+/* Telemetry Box */
+.wk-telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.wk-telemetry-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.wk-telemetry-num {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cyan-diagnostic);
+}
+
+.wk-telemetry-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}

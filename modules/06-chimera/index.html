@@ -6,12 +6,115 @@
     <title>Stanza 06 — Il Chimera Museum | Wunderkammer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="../../src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div style="padding: 100px 2rem; text-align: center;">
-      <h1 style="font-family: var(--font-title); color: var(--gold-primary);">STANZA 06: IL CHIMERA MUSEUM</h1>
-      <p style="color: var(--text-muted); margin-top: 1rem;">Setup Metropolitan Museum API e assemblaggio surrealista procedurale...</p>
-      <a href="../../index.html" class="wk-btn wk-btn-gold" style="margin-top: 2rem;">← Torna all'Archivio</a>
-    </div>
+    <!-- Main Chimera Gallery -->
+    <main class="wk-chimera-workspace">
+      <!-- Framed Artwork Canvas -->
+      <div class="wk-gallery-container">
+        <div class="wk-canvas-frame">
+          <canvas id="chimeraCanvas" width="600" height="800"></canvas>
+          <div id="loadingOverlay" class="wk-loading-overlay">
+            <div class="wk-spinner"></div>
+            <span>Interrogazione Open Access Met Museum NY...</span>
+          </div>
+        </div>
+
+        <div class="wk-canvas-actions">
+          <button id="btnGenerate" class="wk-btn wk-btn-gold" title="Genera un nuovo Cadavre Exquis procedurale">
+            🎲 Genera Nuova Chimera
+          </button>
+          <button id="btnExport" class="wk-btn wk-btn-sm wk-btn-cyan" title="Esporta l'opera con cartellino museale">
+            Esporta Reperto
+          </button>
+        </div>
+      </div>
+
+      <!-- Laboratory HUD & Dynamic Museum Placard -->
+      <aside class="wk-chimera-sidebar">
+        <!-- Panel 1: Dynamic Curatorial Placard -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>CARTELLINO MUSEALE D'ARCHIVIO</span>
+            <span class="wk-mono-tag">CC0 MET NY</span>
+          </div>
+
+          <div class="wk-placard-dossier" id="curatorialPlacard">
+            <!-- Slice 1: Upper Band -->
+            <div class="wk-placard-item">
+              <div class="wk-placard-band-tag">FASCIA SUPERIORE (CIELO & VOLTE)</div>
+              <h4 id="topTitle" class="wk-placard-piece-title">Caricamento...</h4>
+              <p id="topArtist" class="wk-placard-piece-meta"></p>
+              <a id="topLink" href="#" target="_blank" rel="noreferrer" class="wk-placard-link">Vedi al Met Museum ↗</a>
+            </div>
+
+            <!-- Slice 2: Mid Band -->
+            <div class="wk-placard-item">
+              <div class="wk-placard-band-tag">FASCIA CENTRALE (BUSTO & VOLTO)</div>
+              <h4 id="midTitle" class="wk-placard-piece-title">Caricamento...</h4>
+              <p id="midArtist" class="wk-placard-piece-meta"></p>
+              <a id="midLink" href="#" target="_blank" rel="noreferrer" class="wk-placard-link">Vedi al Met Museum ↗</a>
+            </div>
+
+            <!-- Slice 3: Bottom Band -->
+            <div class="wk-placard-item">
+              <div class="wk-placard-band-tag">FASCIA INFERIORE (DRAPPEGGI & BESTIARIO)</div>
+              <h4 id="botTitle" class="wk-placard-piece-title">Caricamento...</h4>
+              <p id="botArtist" class="wk-placard-piece-meta"></p>
+              <a id="botLink" href="#" target="_blank" rel="noreferrer" class="wk-placard-link">Vedi al Met Museum ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Slicing & Anatomical Locks -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>BLOCCO FASCE ANATOMICHE</span>
+            <span class="wk-badge-count">LOCK</span>
+          </div>
+
+          <div class="wk-toggle-group">
+            <label class="wk-checkbox-label">
+              <input type="checkbox" id="lockTop" />
+              <span class="wk-checkmark"></span>
+              <span>Blocca Cielo / Fascia Superiore</span>
+            </label>
+            <label class="wk-checkbox-label">
+              <input type="checkbox" id="lockMid" />
+              <span class="wk-checkmark"></span>
+              <span>Blocca Busto / Fascia Centrale</span>
+            </label>
+            <label class="wk-checkbox-label">
+              <input type="checkbox" id="lockBot" />
+              <span class="wk-checkmark"></span>
+              <span>Blocca Drappeggio / Fascia Inferiore</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Panel 3: Color Harmonization Slider -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>ARMONIZZAZIONE PITTORICA</span>
+            <span class="wk-math-tag">SOFT-LIGHT</span>
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Vernice d'Ambra Unificante</span>
+              <span class="wk-control-value" id="valHarmonize">35%</span>
+            </label>
+            <input type="range" id="sliderHarmonize" class="wk-slider" min="0" max="100" value="35" />
+          </div>
+        </div>
+
+        <p class="wk-annotation">
+          <strong>Cadavre Exquis Surrealista:</strong> Nel 1925 André Breton e i surrealisti inventarono il gioco della composizione collettiva cieca. La Stanza 06 automatizza questo rituale incrociando 500.000 opere del Metropolitan Museum.
+        </p>
+      </aside>
+    </main>
+
+    <script type="module" src="main.js"></script>
   </body>
 </html>

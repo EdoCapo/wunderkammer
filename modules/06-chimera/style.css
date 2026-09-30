@@ -1,0 +1,237 @@
+/* Stanza 06 — Il Chimera Museum (Cadavre Exquis con API Met) */
+
+.wk-chimera-workspace {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  background: radial-gradient(circle at 45% 45%, #15181e 0%, var(--bg-void) 90%);
+}
+
+.wk-gallery-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow-y: auto;
+}
+
+.wk-canvas-frame {
+  position: relative;
+  width: min(540px, 90vw);
+  height: min(720px, 72vh);
+  background: #090a0c;
+  border-radius: var(--radius-sm);
+  box-shadow: 
+    0 22px 55px rgba(0, 0, 0, 0.85),
+    0 0 0 8px #1a1612,
+    0 0 0 10px var(--border-gold),
+    0 0 35px rgba(212, 175, 55, 0.18);
+  overflow: hidden;
+}
+
+#chimeraCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.wk-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 10, 12, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  color: var(--gold-primary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.wk-loading-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wk-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(212, 175, 55, 0.2);
+  border-top-color: var(--gold-primary);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.wk-canvas-actions {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+  align-items: center;
+}
+
+.wk-btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+}
+
+/* Sidebar */
+.wk-chimera-sidebar {
+  width: 420px;
+  min-width: 360px;
+  max-width: 440px;
+  height: 100%;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .wk-chimera-workspace {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .wk-chimera-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+  .wk-canvas-frame {
+    width: 90vw;
+    height: 55vh;
+  }
+}
+
+/* Placard Dossier */
+.wk-placard-dossier {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wk-placard-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  transition: border-color var(--transition-fast);
+}
+
+.wk-placard-item:hover {
+  border-color: var(--border-gold);
+}
+
+.wk-placard-band-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--cyan-diagnostic);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+}
+
+.wk-placard-piece-title {
+  font-family: var(--font-title);
+  font-size: 0.88rem;
+  color: var(--gold-primary);
+  margin-bottom: 0.2rem;
+  line-height: 1.3;
+}
+
+.wk-placard-piece-meta {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.wk-placard-link {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-main);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.wk-placard-link:hover {
+  opacity: 1;
+  color: var(--gold-bright);
+}
+
+/* Checkbox Layer Locks */
+.wk-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wk-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  cursor: pointer;
+  user-select: none;
+}
+
+.wk-checkbox-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.wk-checkmark {
+  width: 16px;
+  height: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.wk-checkbox-label input:checked ~ .wk-checkmark {
+  background: var(--gold-primary);
+  border-color: var(--gold-bright);
+}
+
+.wk-checkmark::after {
+  content: '';
+  display: none;
+  width: 4px;
+  height: 8px;
+  border: solid #090a0c;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.wk-checkbox-label input:checked ~ .wk-checkmark::after {
+  display: block;
+}

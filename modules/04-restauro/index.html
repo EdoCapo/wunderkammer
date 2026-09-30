@@ -6,12 +6,107 @@
     <title>Stanza 04 — Luce Radente & Tavolo 3D | Wunderkammer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="../../src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div style="padding: 100px 2rem; text-align: center;">
-      <h1 style="font-family: var(--font-title); color: var(--gold-primary);">STANZA 04: LUCE RADENTE & TAVOLO 3D</h1>
-      <p style="color: var(--text-muted); margin-top: 1rem;">Setup Three.js, PointLight e shader diagnostici multispettrali (UV / Raggi X)...</p>
-      <a href="../../index.html" class="wk-btn wk-btn-gold" style="margin-top: 2rem;">← Torna all'Archivio</a>
-    </div>
+    <!-- 3D Inspection Workspace -->
+    <main class="wk-restauro-workspace">
+      <div class="wk-viewport-container">
+        <div class="wk-canvas-frame" id="threeViewport">
+          <!-- Three.js Canvas injected here -->
+          <div class="wk-overlay-hint">
+            <span>Muovi il cursore per spostare la lampada radente e proiettare ombre radenti</span>
+          </div>
+        </div>
+
+        <div class="wk-canvas-actions">
+          <button id="btnResetView" class="wk-btn wk-btn-sm" title="Centra la lampada">Centra Lampada</button>
+          <button id="btnExport" class="wk-btn wk-btn-sm wk-btn-gold" title="Esporta rilievo diagnostico">Esporta Reperto 3D</button>
+        </div>
+      </div>
+
+      <!-- Laboratory HUD & Multispectral Console -->
+      <aside class="wk-restauro-sidebar">
+        <!-- Panel 1: Spectral Band Selector -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>SPETTROGRAFIA DIAGNOSTICA</span>
+            <span class="wk-badge-count">3 BANDE</span>
+          </div>
+
+          <div class="wk-spectral-grid">
+            <button class="wk-spectral-btn active" data-mode="visible">
+              <span class="wk-spectral-icon" style="color: #ffda79;">💡</span>
+              <div class="wk-spectral-info">
+                <span class="wk-spectral-name">Luce Radente (Visibile)</span>
+                <span class="wk-spectral-desc">Ombre proiettate su pennellate e craquelure</span>
+              </div>
+            </button>
+
+            <button class="wk-spectral-btn" data-mode="xray">
+              <span class="wk-spectral-icon" style="color: #00e5ff;">☢️</span>
+              <div class="wk-spectral-info">
+                <span class="wk-spectral-name">Raggi X (Radiografia)</span>
+                <span class="wk-spectral-desc">Telaio in legno, chiodi e pentimento cancellato</span>
+              </div>
+            </button>
+
+            <button class="wk-spectral-btn" data-mode="uv">
+              <span class="wk-spectral-icon" style="color: #b5179e;">🟣</span>
+              <div class="wk-spectral-info">
+                <span class="wk-spectral-name">Fluorescenza UV (Wood)</span>
+                <span class="wk-spectral-desc">Resina dammar verde e macchie nere di ritocco</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 2: Light Physics HUD -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>OTTICA DELLA LAMPADA RADENTE</span>
+            <span class="wk-mono-tag">QUOTA Z</span>
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Quota Z (Incidenza Radente)</span>
+              <span class="wk-control-value" id="valZ">0.45</span>
+            </label>
+            <input type="range" id="sliderZ" class="wk-slider" min="10" max="250" value="45" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Intensità Luminosa Lampada</span>
+              <span class="wk-control-value" id="valIntensity">3.5</span>
+            </label>
+            <input type="range" id="sliderIntensity" class="wk-slider" min="5" max="80" value="35" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Rilievo Impasto & Micro-Topografia</span>
+              <span class="wk-control-value" id="valImpasto">0.08</span>
+            </label>
+            <input type="range" id="sliderImpasto" class="wk-slider" min="1" max="20" value="8" />
+          </div>
+        </div>
+
+        <!-- Panel 3: Conservator's Diagnostic Log -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>RELAZIONE CONSERVATIVA</span>
+            <span class="wk-mono-tag" id="specimenCode">REPERTO #1524</span>
+          </div>
+
+          <div class="wk-annotation" id="diagnosticReport">
+            <strong>Analisi in Luce Radente:</strong> La luce d'incidenza radente inferiore rivela la densità di corpo della biacca di piombo sulle creste del naso e della fronte.
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module" src="main.js"></script>
   </body>
 </html>

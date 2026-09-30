@@ -6,12 +6,132 @@
     <title>Stanza 03 — Morfogenesi su Tela | Wunderkammer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="../../src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div style="padding: 100px 2rem; text-align: center;">
-      <h1 style="font-family: var(--font-title); color: var(--gold-primary);">STANZA 03: MORFOGENESI SU TELA</h1>
-      <p style="color: var(--text-muted); margin-top: 1rem;">Setup WebGL2 FBO Ping-Pong e Gray-Scott Reaction-Diffusion...</p>
-      <a href="../../index.html" class="wk-btn wk-btn-gold" style="margin-top: 2rem;">← Torna all'Archivio</a>
-    </div>
+    <!-- Full-viewport WebGL Canvas -->
+    <main class="wk-morfogenesi-workspace">
+      <div class="wk-viewport-container">
+        <div class="wk-canvas-frame">
+          <canvas id="glCanvas" class="wk-gl-canvas"></canvas>
+          <div class="wk-overlay-hint">
+            <span>Trascina con il mouse per iniettare perturbazioni chimiche</span>
+          </div>
+        </div>
+
+        <div class="wk-canvas-actions">
+          <button id="btnReSeed" class="wk-btn wk-btn-sm" title="Re-inietta spore di reagente casuali">Re-Inietta Spore</button>
+          <button id="btnClear" class="wk-btn wk-btn-sm" title="Azzera substrato chimico">Azzera Substrato</button>
+          <button id="btnExport" class="wk-btn wk-btn-sm wk-btn-gold" title="Esporta fotogramma morfogenetico">Esporta Fotogramma</button>
+        </div>
+      </div>
+
+      <!-- Laboratory HUD & Biological Controls -->
+      <aside class="wk-morfogenesi-sidebar">
+        <!-- Panel 1: Turing Presets -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>REGIMI MORFOGENETICI</span>
+            <span class="wk-badge-count">GRAY-SCOTT</span>
+          </div>
+
+          <div class="wk-preset-list" id="presetList">
+            <button class="wk-preset-btn active" data-f="0.0545" data-k="0.062">
+              <span class="wk-preset-title">Coralli & Reti Ramificate</span>
+              <span class="wk-preset-sub">F: 0.0545 | k: 0.0620</span>
+            </button>
+            <button class="wk-preset-btn" data-f="0.018" data-k="0.051">
+              <span class="wk-preset-title">Spirali di Turing</span>
+              <span class="wk-preset-sub">F: 0.0180 | k: 0.0510</span>
+            </button>
+            <button class="wk-preset-btn" data-f="0.030" data-k="0.062">
+              <span class="wk-preset-title">Solitoni & Punti Isolati</span>
+              <span class="wk-preset-sub">F: 0.0300 | k: 0.0620</span>
+            </button>
+            <button class="wk-preset-btn" data-f="0.026" data-k="0.055">
+              <span class="wk-preset-title">Caos & Onde Instabili</span>
+              <span class="wk-preset-sub">F: 0.0260 | k: 0.0550</span>
+            </button>
+            <button class="wk-preset-btn" data-f="0.038" data-k="0.061">
+              <span class="wk-preset-title">Macchie Leopardate</span>
+              <span class="wk-preset-sub">F: 0.0380 | k: 0.0610</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 2: Chromatic Alchemical Palettes -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>PALETTE CROMATICA</span>
+            <span class="wk-math-tag">SPETTRO</span>
+          </div>
+
+          <div class="wk-palette-grid">
+            <button class="wk-palette-btn active" data-palette="0">
+              <span class="wk-palette-swatch" style="background: linear-gradient(135deg, #1a1612, #d4af37, #fff2b2);"></span>
+              <span>Oro Antico</span>
+            </button>
+            <button class="wk-palette-btn" data-palette="1">
+              <span class="wk-palette-swatch" style="background: linear-gradient(135deg, #091326, #18389e, #00e5ff);"></span>
+              <span>Lapislazzuli</span>
+            </button>
+            <button class="wk-palette-btn" data-palette="2">
+              <span class="wk-palette-swatch" style="background: linear-gradient(135deg, #061a0e, #1fa055, #a3f7bf);"></span>
+              <span>Smeraldo</span>
+            </button>
+            <button class="wk-palette-btn" data-palette="3">
+              <span class="wk-palette-swatch" style="background: linear-gradient(135deg, #24070a, #b92823, #ffb3b1);"></span>
+              <span>Cinabro</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 3: Dynamic Chemical Sliders -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>PARAMETRI DI REAZIONE</span>
+            <span class="wk-mono-tag">GPU 60 FPS</span>
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Feed Rate (F)</span>
+              <span class="wk-control-value" id="valF">0.0545</span>
+            </label>
+            <input type="range" id="sliderF" class="wk-slider" min="10" max="80" value="54.5" step="0.5" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Kill Rate (k)</span>
+              <span class="wk-control-value" id="valK">0.0620</span>
+            </label>
+            <input type="range" id="sliderK" class="wk-slider" min="40" max="75" value="62.0" step="0.5" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Iterazioni per Frame (Velocità GPU)</span>
+              <span class="wk-control-value" id="valSteps">10x</span>
+            </label>
+            <input type="range" id="sliderSteps" class="wk-slider" min="1" max="24" value="10" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Raggio Pennello di Iniezione</span>
+              <span class="wk-control-value" id="valBrush">24px</span>
+            </label>
+            <input type="range" id="sliderBrush" class="wk-slider" min="6" max="60" value="24" />
+          </div>
+        </div>
+
+        <p class="wk-annotation">
+          <strong>Biologia Teorica di Turing:</strong> Nel 1952 Alan Turing dimostrò che due sostanze chimiche omogenee in diffusione possono auto-organizzarsi spontaneamente in strutture complesse e stabili (macchie, strisce, spirali).
+        </p>
+      </aside>
+    </main>
+
+    <script type="module" src="main.js"></script>
   </body>
 </html>

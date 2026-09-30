@@ -6,12 +6,132 @@
     <title>Stanza 05 — La Frequenza dell'Arte | Wunderkammer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="../../src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div style="padding: 100px 2rem; text-align: center;">
-      <h1 style="font-family: var(--font-title); color: var(--gold-primary);">STANZA 05: LA FREQUENZA DELL'ARTE</h1>
-      <p style="color: var(--text-muted); margin-top: 1rem;">Setup Trasformata di Fourier 2D (FFT) e sonificazione Web Audio API...</p>
-      <a href="../../index.html" class="wk-btn wk-btn-gold" style="margin-top: 2rem;">← Torna all'Archivio</a>
-    </div>
+    <!-- Main FFT Workspace -->
+    <main class="wk-frequenza-workspace">
+      <!-- Central Spectral Laboratory Triptych -->
+      <div class="wk-triptych-container">
+        <div class="wk-triptych-grid">
+          <!-- Canvas 1: Original Image -->
+          <div class="wk-triptych-card">
+            <div class="wk-card-title">1. DOMINIO SPAZIALE (ORIGINALE)</div>
+            <div class="wk-screen-box">
+              <canvas id="origCanvas" width="256" height="256"></canvas>
+            </div>
+          </div>
+
+          <!-- Canvas 2: 2D FFT Power Spectrum -->
+          <div class="wk-triptych-card">
+            <div class="wk-card-title">2. SPETTRO DI POTENZA 2D FFT</div>
+            <div class="wk-screen-box">
+              <canvas id="fftCanvas" width="256" height="256"></canvas>
+              <canvas id="ringsCanvas" width="256" height="256"></canvas>
+            </div>
+          </div>
+
+          <!-- Canvas 3: Filtered Inverse FFT Reconstruction -->
+          <div class="wk-triptych-card">
+            <div class="wk-card-title">3. RICOSTRUZIONE IFFT FILTRATA</div>
+            <div class="wk-screen-box">
+              <canvas id="reconstructCanvas" width="256" height="256"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="wk-canvas-actions">
+          <button id="btnAudioToggle" class="wk-btn wk-btn-cyan" title="Avvia sonificazione Web Audio API">
+            <span id="audioIcon">▶</span>
+            <span id="audioLabel">Attiva Drone Sinestesico</span>
+          </button>
+          <label class="wk-btn wk-btn-sm" style="cursor: pointer;">
+            Carica Opera
+            <input type="file" id="inputCustomImage" accept="image/*" style="display: none;" />
+          </label>
+          <button id="btnExport" class="wk-btn wk-btn-sm wk-btn-gold" title="Esporta spettro di Fourier">
+            Esporta Spettro
+          </button>
+        </div>
+      </div>
+
+      <!-- Laboratory Sidebar -->
+      <aside class="wk-frequenza-sidebar">
+        <!-- Panel 1: Presets -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>CONFRONTO ACUSTICO-SPAZIALE</span>
+            <span class="wk-badge-count">PRESET</span>
+          </div>
+
+          <div class="wk-preset-list">
+            <button class="wk-preset-btn active" data-preset="piero">
+              <span class="wk-preset-title">Piero della Francesca</span>
+              <span class="wk-preset-sub">Geometria e volumi ampi: droni gravi e limpidi</span>
+            </button>
+
+            <button class="wk-preset-btn" data-preset="pollock">
+              <span class="wk-preset-title">Jackson Pollock (Action Painting)</span>
+              <span class="wk-preset-sub">Caos e spatolature: rumore bianco e alte frequenze</span>
+            </button>
+
+            <button class="wk-preset-btn" data-preset="vermeer">
+              <span class="wk-preset-title">Johannes Vermeer</span>
+              <span class="wk-preset-sub">Chiaroscuro morbido: accordi armonici stabili</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 2: 8 Concentric Radial Bands Visualizer -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>8 BANDE RADIALI (r = √(u² + v²))</span>
+            <span class="wk-mono-tag">ENERGIA</span>
+          </div>
+
+          <div class="wk-bands-meters" id="bandsMeters">
+            <!-- 8 dynamic energy meters populated by JS -->
+          </div>
+        </div>
+
+        <!-- Panel 3: Spatial Filtering & Audio Sliders -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>FILTRI FREQUENZIALI 2D</span>
+            <span class="wk-math-tag">IFFT MASK</span>
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Filtro Passa-Basso (Taglio Alte Freq.)</span>
+              <span class="wk-control-value" id="valLowPass">100%</span>
+            </label>
+            <input type="range" id="sliderLowPass" class="wk-slider" min="10" max="100" value="100" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Filtro Passa-Alto (Taglio Basse Freq.)</span>
+              <span class="wk-control-value" id="valHighPass">0%</span>
+            </label>
+            <input type="range" id="sliderHighPass" class="wk-slider" min="0" max="90" value="0" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Volume Master Drone</span>
+              <span class="wk-control-value" id="valVolume">70%</span>
+            </label>
+            <input type="range" id="sliderVolume" class="wk-slider" min="0" max="100" value="70" />
+          </div>
+        </div>
+
+        <p class="wk-annotation">
+          <strong>Sinestesia di Fourier:</strong> Le frequenze spaziali al centro dello spettro ($r \to 0$) rappresentano la luce e le campiture generali; allontanandosi dal centro verso i bordi, emergono i tratti minuti e il rumore della superficie.
+        </p>
+      </aside>
+    </main>
+
+    <script type="module" src="main.js"></script>
   </body>
 </html>
