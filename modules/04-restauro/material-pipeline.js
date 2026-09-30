@@ -1,6 +1,6 @@
 /**
  * Wunderkammer — Room 04: Material Pipeline for 3D Restoration Table
- * Generates procedural textures for:
+ * Generates textures from real museum paintings or procedural masters:
  * 1. Visible Light (Full color classic oil painting)
  * 2. Displacement / Bump Height Map (Impasto thickness, canvas weave, cracks)
  * 3. Normal Map
@@ -10,51 +10,58 @@
 
 import * as THREE from 'three';
 
-export function createRestorationTextures(width = 1024, height = 1024) {
+export function createRestorationTextures(sourceImage = null, width = 1024, height = 1024) {
   // 1. Visible Color Texture Canvas
   const visCanvas = document.createElement('canvas');
   visCanvas.width = width;
   visCanvas.height = height;
   const visCtx = visCanvas.getContext('2d');
 
-  // Background dark chiaroscuro room
-  const bgGrad = visCtx.createRadialGradient(width * 0.45, height * 0.4, 40, width * 0.5, height * 0.5, width * 0.6);
-  bgGrad.addColorStop(0, '#3a2a1a');
-  bgGrad.addColorStop(0.7, '#1c150e');
-  bgGrad.addColorStop(1, '#0b0907');
-  visCtx.fillStyle = bgGrad;
-  visCtx.fillRect(0, 0, width, height);
+  if (sourceImage) {
+    // Fill dark gallery border
+    visCtx.fillStyle = '#090a0c';
+    visCtx.fillRect(0, 0, width, height);
 
-  // Robe: Deep Vermilion and Gold Brocade
-  visCtx.fillStyle = '#8b1c14';
-  visCtx.beginPath();
-  visCtx.moveTo(width * 0.15, height * 0.95);
-  visCtx.bezierCurveTo(width * 0.3, height * 0.55, width * 0.7, height * 0.55, width * 0.85, height * 0.95);
-  visCtx.fill();
+    // Fit sourceImage centered with aspect ratio
+    const imgW = sourceImage.width;
+    const imgH = sourceImage.height;
+    const scale = Math.min(width / imgW, height / imgH);
+    const destW = imgW * scale;
+    const destH = imgH * scale;
+    const destX = (width - destW) / 2;
+    const destY = (height - destH) / 2;
 
-  // Face oval: Golden Venetian Flesh
-  const faceGrad = visCtx.createRadialGradient(width * 0.5, height * 0.38, 20, width * 0.5, height * 0.4, width * 0.22);
-  faceGrad.addColorStop(0, '#f2d8be');
-  faceGrad.addColorStop(0.65, '#cca47e');
-  faceGrad.addColorStop(1, '#63442a');
-  visCtx.fillStyle = faceGrad;
-  visCtx.beginPath();
-  visCtx.ellipse(width * 0.5, height * 0.4, width * 0.16, height * 0.21, 0, 0, Math.PI * 2);
-  visCtx.fill();
+    visCtx.drawImage(sourceImage, destX, destY, destW, destH);
+  } else {
+    // Fallback classical chiaroscuro portrait
+    const bgGrad = visCtx.createRadialGradient(width * 0.45, height * 0.4, 40, width * 0.5, height * 0.5, width * 0.6);
+    bgGrad.addColorStop(0, '#3a2a1a');
+    bgGrad.addColorStop(0.7, '#1c150e');
+    bgGrad.addColorStop(1, '#0b0907');
+    visCtx.fillStyle = bgGrad;
+    visCtx.fillRect(0, 0, width, height);
 
-  // Eyes, nose, expressive Renaissance gaze
-  visCtx.fillStyle = '#2d1e14';
-  visCtx.beginPath();
-  visCtx.arc(width * 0.44, height * 0.37, 8, 0, Math.PI * 2);
-  visCtx.arc(width * 0.56, height * 0.37, 8, 0, Math.PI * 2);
-  visCtx.fill();
+    visCtx.fillStyle = '#8b1c14';
+    visCtx.beginPath();
+    visCtx.moveTo(width * 0.15, height * 0.95);
+    visCtx.bezierCurveTo(width * 0.3, height * 0.55, width * 0.7, height * 0.55, width * 0.85, height * 0.95);
+    visCtx.fill();
 
-  // Dense Lead White Highlights on Forehead and Nose ridge
-  visCtx.fillStyle = '#fffdf7';
-  visCtx.beginPath();
-  visCtx.ellipse(width * 0.5, height * 0.32, 28, 14, 0, 0, Math.PI * 2);
-  visCtx.ellipse(width * 0.5, height * 0.39, 6, 26, 0, 0, Math.PI * 2);
-  visCtx.fill();
+    const faceGrad = visCtx.createRadialGradient(width * 0.5, height * 0.38, 20, width * 0.5, height * 0.4, width * 0.22);
+    faceGrad.addColorStop(0, '#f2d8be');
+    faceGrad.addColorStop(0.65, '#cca47e');
+    faceGrad.addColorStop(1, '#63442a');
+    visCtx.fillStyle = faceGrad;
+    visCtx.beginPath();
+    visCtx.ellipse(width * 0.5, height * 0.4, width * 0.16, height * 0.21, 0, 0, Math.PI * 2);
+    visCtx.fill();
+
+    visCtx.fillStyle = '#fffdf7';
+    visCtx.beginPath();
+    visCtx.ellipse(width * 0.5, height * 0.32, 28, 14, 0, 0, Math.PI * 2);
+    visCtx.ellipse(width * 0.5, height * 0.39, 6, 26, 0, 0, Math.PI * 2);
+    visCtx.fill();
+  }
 
   // 2. Displacement / Bump Height Map Canvas
   const heightCanvas = document.createElement('canvas');
@@ -62,7 +69,6 @@ export function createRestorationTextures(width = 1024, height = 1024) {
   heightCanvas.height = height;
   const hCtx = heightCanvas.getContext('2d');
 
-  // Base canvas weave linen texture
   hCtx.fillStyle = '#222222';
   hCtx.fillRect(0, 0, width, height);
 
@@ -83,7 +89,7 @@ export function createRestorationTextures(width = 1024, height = 1024) {
       // Micro linen weave modulation
       const weaveX = Math.sin(x * 0.8) * 0.5 + 0.5;
       const weaveY = Math.cos(y * 0.8) * 0.5 + 0.5;
-      const weave = (weaveX * weaveY) * 28;
+      const weave = (weaveX * weaveY) * 26;
 
       // Heavy impasto on highlights (Lead White has 3x thickness)
       const impasto = Math.pow(lum, 1.8) * 160;
@@ -139,16 +145,14 @@ export function createRestorationTextures(width = 1024, height = 1024) {
 
   // Wooden stretcher bars (Chassis) casting dark absorption bands
   xCtx.fillStyle = '#222222';
-  // Outer frame bars
   const barThick = 65;
   xCtx.fillRect(0, 0, width, barThick);
   xCtx.fillRect(0, height - barThick, width, barThick);
   xCtx.fillRect(0, 0, barThick, height);
   xCtx.fillRect(width - barThick, 0, barThick, height);
-  // Cross brace
   xCtx.fillRect(0, height * 0.5 - 25, width, 50);
 
-  // Rusty iron nails holding canvas edges (High radio-opacity white spots)
+  // Rusty iron nails holding canvas edges
   xCtx.fillStyle = '#ffffff';
   for (let i = 40; i < width - 40; i += 70) {
     xCtx.beginPath();
@@ -157,41 +161,35 @@ export function createRestorationTextures(width = 1024, height = 1024) {
     xCtx.fill();
   }
 
-  // Pentimento (Deleted figure originally sketched under the current portrait!)
-  xCtx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+  // Radiographic absorption from paint surface (Lead White is radio-opaque)
+  xCtx.globalAlpha = 0.55;
+  xCtx.drawImage(heightCanvas, 0, 0);
+  xCtx.globalAlpha = 1.0;
+
+  // Pentimento (Erased underlying sketch: a dagger hidden beneath the paint)
+  xCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
   xCtx.lineWidth = 14;
-  // A hand holding a dagger that the artist later erased/covered!
   xCtx.beginPath();
-  xCtx.moveTo(width * 0.3, height * 0.7);
-  xCtx.lineTo(width * 0.42, height * 0.55);
-  xCtx.lineTo(width * 0.46, height * 0.58);
+  xCtx.moveTo(width * 0.32, height * 0.68);
+  xCtx.lineTo(width * 0.44, height * 0.54);
+  xCtx.lineTo(width * 0.48, height * 0.57);
   xCtx.stroke();
-  // Dagger blade
   xCtx.lineWidth = 8;
   xCtx.beginPath();
-  xCtx.moveTo(width * 0.42, height * 0.55);
-  xCtx.lineTo(width * 0.62, height * 0.48);
+  xCtx.moveTo(width * 0.44, height * 0.54);
+  xCtx.lineTo(width * 0.64, height * 0.48);
   xCtx.stroke();
 
-  // Dense lead white absorption from upper paint layer
-  xCtx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-  xCtx.beginPath();
-  xCtx.ellipse(width * 0.5, height * 0.32, 40, 24, 0, 0, Math.PI * 2);
-  xCtx.fill();
-
-  // 5. UV Wood's Light Canvas (Luce di Wood)
-  // Aged dammar varnish produces an ethereal ghostly green-amber fluorescence,
-  // while modern restoration retouchings (polymeric resin, acrylic) absorb UV and appear as dead pitch-black spots!
+  // 5. UV Wood's Light Canvas
   const uvCanvas = document.createElement('canvas');
   uvCanvas.width = width;
   uvCanvas.height = height;
   const uvCtx = uvCanvas.getContext('2d');
 
-  // Deep dark violet ambient
   uvCtx.fillStyle = '#06030c';
   uvCtx.fillRect(0, 0, width, height);
 
-  // Luminous dammar resin fluorescence (Ghostly greenish-yellow patina)
+  // Fluorescent green dammar glow modulated by surface
   const uvGrad = uvCtx.createRadialGradient(width * 0.5, height * 0.45, 60, width * 0.5, height * 0.5, width * 0.55);
   uvGrad.addColorStop(0, '#387842');
   uvGrad.addColorStop(0.65, '#204d2c');
@@ -199,18 +197,16 @@ export function createRestorationTextures(width = 1024, height = 1024) {
   uvCtx.fillStyle = uvGrad;
   uvCtx.fillRect(0, 0, width, height);
 
-  // Modern Restoration Retouch Patches (Pitch black absorption spots)
+  // Retouch patches (Pitch black absorption spots)
   uvCtx.fillStyle = '#020104';
-  // Retouch 1: Cheek scrape repair
   uvCtx.beginPath();
-  uvCtx.ellipse(width * 0.42, height * 0.44, 22, 14, 0.3, 0, Math.PI * 2);
+  uvCtx.ellipse(width * 0.42, height * 0.44, 28, 18, 0.3, 0, Math.PI * 2);
   uvCtx.fill();
-  // Retouch 2: Mantle tear repair
   uvCtx.beginPath();
-  uvCtx.ellipse(width * 0.68, height * 0.72, 34, 18, -0.4, 0, Math.PI * 2);
+  uvCtx.ellipse(width * 0.66, height * 0.72, 38, 22, -0.4, 0, Math.PI * 2);
   uvCtx.fill();
 
-  // Convert canvases to Three.js Textures
+  // Textures
   const visTexture = new THREE.CanvasTexture(visCanvas);
   const bumpTexture = new THREE.CanvasTexture(heightCanvas);
   const normalTexture = new THREE.CanvasTexture(normalCanvas);

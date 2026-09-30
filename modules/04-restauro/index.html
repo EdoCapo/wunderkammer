@@ -27,6 +27,23 @@
 
       <!-- Laboratory HUD & Multispectral Console -->
       <aside class="wk-restauro-sidebar">
+        <!-- Panel 0: Real Artwork Selector -->
+        <div class="wk-hud-panel">
+          <div class="wk-hud-title">
+            <span>OPERE REALI DA RESTAURARE</span>
+            <span class="wk-badge-count">MUSEI</span>
+          </div>
+
+          <div class="wk-search-box">
+            <input type="text" id="inputArtSearch" placeholder="Cerca al museo (es. Rembrandt, Leonardo)..." class="wk-search-input" />
+            <button id="btnSearchMuseum" class="wk-btn wk-btn-sm wk-btn-cyan">Cerca</button>
+          </div>
+
+          <div class="wk-preset-list" id="presetList" style="max-height: 140px; overflow-y: auto;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
         <!-- Panel 1: Spectral Band Selector -->
         <div class="wk-hud-panel">
           <div class="wk-hud-title">

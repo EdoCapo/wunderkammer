@@ -4,6 +4,10 @@ import {
   mixKubelkaMunk,
   renderCraquelureOverlay,
 } from './pigment-engine.js';
+import {
+  CURATED_MASTERPIECES,
+  loadCORSImage,
+} from '../../src/shared/art-api.js';
 
 // 1. Initialize Shared Room Header
 initRoomHeader({
@@ -30,6 +34,7 @@ let currentBrushColor = HISTORICAL_PIGMENTS.cinabro.baseColor;
 // Track strokes: each stroke has { points: [{x, y}], color: string, pigmentKey: string, size: number }
 let strokes = [];
 let currentStroke = null;
+let currentBaseImage = null;
 
 // Environmental parameters
 let stateTimeYears = 0;
@@ -237,6 +242,18 @@ function renderFullScene() {
   paintCtx.fillStyle = '#f4ede1';
   paintCtx.fillRect(0, 0, w, h);
 
+  // If a real museum artwork is loaded, draw it as base
+  if (currentBaseImage) {
+    const imgW = currentBaseImage.width;
+    const imgH = currentBaseImage.height;
+    const scale = Math.min(w / imgW, h / imgH);
+    const destW = imgW * scale;
+    const destH = imgH * scale;
+    const destX = (w - destW) / 2;
+    const destY = (h - destH) / 2;
+    paintCtx.drawImage(currentBaseImage, destX, destY, destW, destH);
+  }
+
   // Redraw all strokes aged according to the temporal matrix
   strokes.forEach((stroke) => {
     let agedColor = stroke.color;
@@ -279,14 +296,40 @@ function renderFullScene() {
   }
 }
 
-// 7. Actions: Masterpiece sketch & Clear
+// 7. Actions: Real Paintings & Canvas Reset
 document.getElementById('btnNewCanvas').addEventListener('click', () => {
   strokes = [];
+  currentBaseImage = null;
   renderFullScene();
 });
 
-document.getElementById('btnLoadMasterpiece').addEventListener('click', () => {
-  loadRenaissanceBozzetto();
+let currentArtIndex = 0;
+document.getElementById('btnLoadRealPainting').addEventListener('click', async () => {
+  strokes = [];
+  const art = CURATED_MASTERPIECES[currentArtIndex % CURATED_MASTERPIECES.length];
+  currentArtIndex++;
+  try {
+    currentBaseImage = await loadCORSImage(art.url);
+    renderFullScene();
+  } catch (e) {
+    loadRenaissanceBozzetto();
+  }
+});
+
+document.getElementById('inputCustomPaint').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      strokes = [];
+      currentBaseImage = img;
+      renderFullScene();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 });
 
 function loadRenaissanceBozzetto() {

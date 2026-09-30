@@ -6,6 +6,11 @@ import {
   applySpatialFilter,
 } from './fft2d.js';
 import { FrequencyDroneSynth } from './audio-synth.js';
+import {
+  CURATED_MASTERPIECES,
+  searchMuseumArtworks,
+  loadCORSImage,
+} from '../../src/shared/art-api.js';
 
 // 1. Initialize Room Header
 initRoomHeader({
@@ -66,103 +71,104 @@ for (let i = 0; i < 8; i++) {
   bandRows.push(row.querySelector(`#meterFill${i}`));
 }
 
-// 3. Classical Image Synthesizers (256x256)
-function generateImage(type) {
+// 3. Populate Real Masterpieces & Live Search
+const presetList = document.getElementById('presetList');
+
+function renderArtList(artworks) {
+  presetList.innerHTML = '';
+  artworks.forEach((art, idx) => {
+    const btn = document.createElement('button');
+    btn.className = `wk-preset-btn ${idx === 0 ? 'active' : ''}`;
+    btn.innerHTML = `
+      <span class="wk-preset-title">${art.title}</span>
+      <span class="wk-preset-sub">${art.artist} (${art.year || ''})</span>
+    `;
+
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.wk-preset-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadMasterpiece(art);
+    });
+
+    presetList.appendChild(btn);
+  });
+}
+
+renderArtList(CURATED_MASTERPIECES);
+
+// Live Search
+const inputArtSearch = document.getElementById('inputArtSearch');
+const btnSearchMuseum = document.getElementById('btnSearchMuseum');
+
+async function handleSearch() {
+  const q = inputArtSearch.value.trim();
+  if (!q) {
+    renderArtList(CURATED_MASTERPIECES);
+    return;
+  }
+
+  btnSearchMuseum.textContent = '...';
+  try {
+    const results = await searchMuseumArtworks(q, 8);
+    if (results.length > 0) {
+      renderArtList(results);
+      loadMasterpiece(results[0]);
+    } else {
+      alert(`Nessuna opera trovata per "${q}".`);
+    }
+  } catch (err) {
+    console.error('Search error:', err);
+  } finally {
+    btnSearchMuseum.textContent = 'Cerca';
+  }
+}
+
+btnSearchMuseum.addEventListener('click', handleSearch);
+inputArtSearch.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleSearch();
+});
+
+// 4. Load & Process Real Images
+async function loadMasterpiece(art) {
+  try {
+    const img = await loadCORSImage(art.url);
+    processArtwork(img);
+  } catch (err) {
+    console.warn('CORS or load failure, using synthetic pattern:', err);
+    processArtwork(generateFallbackCanvas());
+  }
+}
+
+function generateFallbackCanvas() {
   const c = document.createElement('canvas');
   c.width = N;
   c.height = N;
   const ctx = c.getContext('2d');
-
-  if (type === 'piero') {
-    // Piero della Francesca: Large, calm geometric masses, low spatial noise
-    const sky = ctx.createLinearGradient(0, 0, 0, N);
-    sky.addColorStop(0, '#5282a8');
-    sky.addColorStop(1, '#a8cadf');
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, N, N);
-
-    // River horizontal band
-    ctx.fillStyle = '#7a9686';
-    ctx.fillRect(0, N * 0.7, N, N * 0.3);
-
-    // Arch and temple pillar
-    ctx.fillStyle = '#e4d5be';
-    ctx.fillRect(N * 0.38, N * 0.2, N * 0.24, N * 0.6);
-
-    // Vertical tree trunk
-    ctx.fillStyle = '#2c1e13';
-    ctx.fillRect(N * 0.12, 0, N * 0.08, N);
-
-    // Symmetrical sphere / halo
-    ctx.fillStyle = '#f0db8d';
-    ctx.beginPath();
-    ctx.arc(N * 0.5, N * 0.28, N * 0.12, 0, Math.PI * 2);
-    ctx.fill();
-
-  } else if (type === 'pollock') {
-    // Jackson Pollock Action Painting: Chaotic spatters, fractal micro-drips (High-frequency saturation!)
-    ctx.fillStyle = '#1c1b18';
-    ctx.fillRect(0, 0, N, N);
-
-    // Hundreds of chaotic splatters and fine lines
-    const colors = ['#f5f0e1', '#d4af37', '#1a3c6d', '#8b1c14', '#0d0d0d'];
-    for (let i = 0; i < 280; i++) {
-      ctx.strokeStyle = colors[i % colors.length];
-      ctx.lineWidth = Math.random() * 2.5 + 0.5;
-
-      ctx.beginPath();
-      let x = Math.random() * N;
-      let y = Math.random() * N;
-      ctx.moveTo(x, y);
-
-      for (let s = 0; s < 5; s++) {
-        x += (Math.random() - 0.5) * 55;
-        y += (Math.random() - 0.5) * 55;
-        ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-
-      // Splatter drops
-      ctx.fillStyle = colors[(i + 1) % colors.length];
-      ctx.beginPath();
-      ctx.arc(Math.random() * N, Math.random() * N, Math.random() * 3 + 1, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-  } else {
-    // Johannes Vermeer: Soft chiaroscuro & single bright specular highlight
-    ctx.fillStyle = '#0a0d10';
-    ctx.fillRect(0, 0, N, N);
-
-    // Gentle torso
-    ctx.fillStyle = '#a87834';
-    ctx.beginPath();
-    ctx.ellipse(N * 0.5, N * 0.75, N * 0.35, N * 0.25, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Soft head oval
-    const grad = ctx.createRadialGradient(N * 0.5, N * 0.4, 10, N * 0.5, N * 0.45, N * 0.22);
-    grad.addColorStop(0, '#fcedd9');
-    grad.addColorStop(1, '#3b2518');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(N * 0.5, N * 0.45, N * 0.2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Specular Pearl highlight
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(N * 0.42, N * 0.55, 6, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
+  ctx.fillStyle = '#1c1b18';
+  ctx.fillRect(0, 0, N, N);
+  ctx.fillStyle = '#d4af37';
+  ctx.beginPath();
+  ctx.arc(N / 2, N / 2, N * 0.3, 0, Math.PI * 2);
+  ctx.fill();
   return c;
 }
 
-// 4. Processing Pipeline: Image -> FFT 2D -> Audio & Filtering
-function processArtwork(sourceCanvasOrImg) {
+// 5. Processing Pipeline: Image -> FFT 2D -> Audio & Filtering
+function processArtwork(sourceImg) {
   origCtx.clearRect(0, 0, N, N);
-  origCtx.drawImage(sourceCanvasOrImg, 0, 0, N, N);
+  origCtx.fillStyle = '#090a0c';
+  origCtx.fillRect(0, 0, N, N);
+
+  // Preserve aspect ratio inside 256x256
+  const imgW = sourceImg.width;
+  const imgH = sourceImg.height;
+  const scale = Math.min(N / imgW, N / imgH);
+  const destW = imgW * scale;
+  const destH = imgH * scale;
+  const destX = (N - destW) / 2;
+  const destY = (N - destH) / 2;
+
+  origCtx.drawImage(sourceImg, destX, destY, destW, destH);
 
   // Extract grayscale data into real buffer
   const imgData = origCtx.getImageData(0, 0, N, N);
@@ -235,7 +241,7 @@ function updateMeters(bands) {
   }
 }
 
-// 5. Inverse FFT Reconstruction with Filter Cutoffs
+// 6. Inverse FFT Reconstruction with Filter Cutoffs
 function reconstructFilteredImage() {
   const reRec = new Float64Array(reOrig);
   const imRec = new Float64Array(imOrig);
@@ -262,17 +268,6 @@ function reconstructFilteredImage() {
   }
   recCtx.putImageData(recData, 0, 0);
 }
-
-// 6. UI: Presets
-document.querySelectorAll('.wk-preset-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.wk-preset-btn').forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    const art = generateImage(btn.dataset.preset);
-    processArtwork(art);
-  });
-});
 
 // 7. UI: Sliders
 const sliderLowPass = document.getElementById('sliderLowPass');
@@ -347,6 +342,5 @@ document.getElementById('btnExport').addEventListener('click', () => {
   link.click();
 });
 
-// Boot
-const initialArt = generateImage('piero');
-processArtwork(initialArt);
+// Initial load: Monna Lisa!
+loadMasterpiece(CURATED_MASTERPIECES[0]);

@@ -1,5 +1,10 @@
 import { initRoomHeader } from '../../src/shared/navigation.js';
 import { RestorationScene } from './scene-manager.js';
+import {
+  CURATED_MASTERPIECES,
+  searchMuseumArtworks,
+  loadCORSImage,
+} from '../../src/shared/art-api.js';
 
 // 1. Initialize Room Header
 initRoomHeader({
@@ -12,7 +17,72 @@ initRoomHeader({
 const viewport = document.getElementById('threeViewport');
 const scene = new RestorationScene(viewport);
 
-// 2. Diagnostic Reports
+// 2. Real Artwork Selector & Live Search
+const presetList = document.getElementById('presetList');
+const inputArtSearch = document.getElementById('inputArtSearch');
+const btnSearchMuseum = document.getElementById('btnSearchMuseum');
+
+function renderArtList(artworks) {
+  presetList.innerHTML = '';
+  artworks.forEach((art, idx) => {
+    const btn = document.createElement('button');
+    btn.className = `wk-preset-btn ${idx === 0 ? 'active' : ''}`;
+    btn.innerHTML = `
+      <span class="wk-preset-title">${art.title}</span>
+      <span class="wk-preset-sub">${art.artist} (${art.year || ''})</span>
+    `;
+
+    btn.addEventListener('click', async () => {
+      document.querySelectorAll('.wk-preset-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      await loadArtwork(art);
+    });
+
+    presetList.appendChild(btn);
+  });
+}
+
+renderArtList(CURATED_MASTERPIECES);
+
+async function loadArtwork(art) {
+  try {
+    const img = await loadCORSImage(art.url);
+    scene.updateArtwork(img);
+  } catch (err) {
+    console.warn('Could not load image, keeping fallback:', err);
+  }
+}
+
+// Live Museum API Search
+async function handleSearch() {
+  const q = inputArtSearch.value.trim();
+  if (!q) {
+    renderArtList(CURATED_MASTERPIECES);
+    return;
+  }
+
+  btnSearchMuseum.textContent = '...';
+  try {
+    const results = await searchMuseumArtworks(q, 8);
+    if (results.length > 0) {
+      renderArtList(results);
+      loadArtwork(results[0]);
+    } else {
+      alert(`Nessuna opera trovata per "${q}".`);
+    }
+  } catch (err) {
+    console.error('Search error:', err);
+  } finally {
+    btnSearchMuseum.textContent = 'Cerca';
+  }
+}
+
+btnSearchMuseum.addEventListener('click', handleSearch);
+inputArtSearch.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleSearch();
+});
+
+// 3. Diagnostic Reports
 const reports = {
   visible: `<strong>Analisi in Luce Radente:</strong> L'angolo d'incidenza quasi orizzontale proietta ombre marcate sulle creste della materia pittorica. Si osserva un impasto generoso a base di biacca sulle zone frontali e una rete di craquelure fine a spirale.`,
   xray: `<strong>Indagine Radiografica a Raggi X:</strong> La penetrazione radioattiva svela il telaio in legno con traversa centrale e chiodi perimetrali in ferro battuto. Emerge un sensazionale <em>pentimento</em>: sotto il drappeggio cremisi, l'artista aveva originariamente dipinto una mano che stringeva un pugnale!`,
@@ -21,7 +91,7 @@ const reports = {
 
 const diagnosticReport = document.getElementById('diagnosticReport');
 
-// 3. Spectral Mode Buttons
+// 4. Spectral Mode Buttons
 document.querySelectorAll('.wk-spectral-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.wk-spectral-btn').forEach((b) => b.classList.remove('active'));
@@ -33,7 +103,7 @@ document.querySelectorAll('.wk-spectral-btn').forEach((btn) => {
   });
 });
 
-// 4. Sliders
+// 5. Sliders
 const sliderZ = document.getElementById('sliderZ');
 const sliderIntensity = document.getElementById('sliderIntensity');
 const sliderImpasto = document.getElementById('sliderImpasto');
@@ -60,7 +130,7 @@ sliderImpasto.addEventListener('input', (e) => {
   scene.setImpastoRelief(impasto);
 });
 
-// 5. Actions
+// 6. Actions
 document.getElementById('btnResetView').addEventListener('click', () => {
   scene.targetLampX = 0;
   scene.targetLampY = 0;
@@ -75,10 +145,13 @@ document.getElementById('btnExport').addEventListener('click', () => {
   link.click();
 });
 
-// 6. 60 FPS Render Loop
+// 7. 60 FPS Render Loop
 function animate() {
   scene.update();
   requestAnimationFrame(animate);
 }
 
 animate();
+
+// Initial load: Rembrandt
+loadArtwork(CURATED_MASTERPIECES[6]);

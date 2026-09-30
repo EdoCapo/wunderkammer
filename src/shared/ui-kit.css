@@ -375,3 +375,33 @@ input[type="range"].wk-slider::-moz-range-thumb {
   font-family: var(--font-title);
   letter-spacing: 0.05em;
 }
+
+/* Museum Search Controls */
+.wk-search-box {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.wk-search-input {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.75rem;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.wk-search-input:focus {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.wk-search-input::placeholder {
+  color: var(--text-dim);
+}
+

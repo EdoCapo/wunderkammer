@@ -142,6 +142,13 @@ export class RestorationScene {
     this.material.needsUpdate = true;
   }
 
+  updateArtwork(sourceImage) {
+    this.textures = createRestorationTextures(sourceImage);
+    this.material.bumpMap = this.textures.bumpTexture;
+    this.material.normalMap = this.textures.normalTexture;
+    this.setSpectralMode(this.currentMode);
+  }
+
   setLightAltitude(z) {
     this.rakingLight.position.z = z;
   }

@@ -60,25 +60,18 @@
         <!-- Panel 1: Presets -->
         <div class="wk-hud-panel">
           <div class="wk-hud-title">
-            <span>CONFRONTO ACUSTICO-SPAZIALE</span>
-            <span class="wk-badge-count">PRESET</span>
+            <span>OPERE REALI DEI MUSEI</span>
+            <span class="wk-badge-count">OPEN ACCESS</span>
           </div>
 
-          <div class="wk-preset-list">
-            <button class="wk-preset-btn active" data-preset="piero">
-              <span class="wk-preset-title">Piero della Francesca</span>
-              <span class="wk-preset-sub">Geometria e volumi ampi: droni gravi e limpidi</span>
-            </button>
+          <!-- Live Museum Search Input -->
+          <div class="wk-search-box">
+            <input type="text" id="inputArtSearch" placeholder="Cerca al museo (es. Monet, Van Gogh)..." class="wk-search-input" />
+            <button id="btnSearchMuseum" class="wk-btn wk-btn-sm wk-btn-cyan">Cerca</button>
+          </div>
 
-            <button class="wk-preset-btn" data-preset="pollock">
-              <span class="wk-preset-title">Jackson Pollock (Action Painting)</span>
-              <span class="wk-preset-sub">Caos e spatolature: rumore bianco e alte frequenze</span>
-            </button>
-
-            <button class="wk-preset-btn" data-preset="vermeer">
-              <span class="wk-preset-title">Johannes Vermeer</span>
-              <span class="wk-preset-sub">Chiaroscuro morbido: accordi armonici stabili</span>
-            </button>
+          <div class="wk-preset-list" id="presetList">
+            <!-- Dynamically populated from CURATED_MASTERPIECES and live search results -->
           </div>
         </div>
 
