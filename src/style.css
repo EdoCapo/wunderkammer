@@ -1,0 +1,246 @@
+/* Wunderkammer Home Hub Styles */
+
+.wk-ambient-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+}
+
+.wk-hub-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 4rem 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header / Portal */
+.wk-hub-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.wk-hub-tagline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.wk-tag-pill {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border-gold);
+  color: var(--gold-primary);
+  border-radius: var(--radius-sm);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.wk-hub-title {
+  font-family: var(--font-title);
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--gold-primary);
+  text-shadow: 
+    0 0 35px rgba(212, 175, 55, 0.35),
+    0 0 70px rgba(212, 175, 55, 0.12);
+  margin-bottom: 0.6rem;
+}
+
+.wk-hub-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-style: italic;
+  color: var(--text-main);
+  opacity: 0.85;
+  letter-spacing: 0.04em;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.wk-hub-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.8rem auto 0 auto;
+  width: 240px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+  position: relative;
+}
+
+.wk-diamond {
+  width: 8px;
+  height: 8px;
+  background: var(--gold-primary);
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px var(--gold-primary);
+}
+
+/* Chamber Grid */
+.wk-chambers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 768px) {
+  .wk-chambers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Chamber Card */
+.wk-chamber-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 2.2rem 2rem 1.8rem 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-smooth);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.wk-card-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+  transition: all var(--transition-smooth);
+}
+
+.wk-chamber-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(212, 175, 55, 0.45);
+  background: rgba(22, 25, 31, 0.85);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(212, 175, 55, 0.15);
+}
+
+.wk-chamber-card:hover .wk-card-edge {
+  background: linear-gradient(90deg, var(--cyan-diagnostic), var(--gold-primary), var(--cyan-diagnostic));
+  height: 3px;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+}
+
+.wk-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.wk-chamber-num {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: var(--gold-primary);
+}
+
+.wk-card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--cyan-diagnostic);
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.wk-chamber-name {
+  font-family: var(--font-title);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-main);
+  margin-bottom: 0.85rem;
+  line-height: 1.35;
+  transition: color var(--transition-fast);
+}
+
+.wk-chamber-card:hover .wk-chamber-name {
+  color: var(--gold-bright);
+}
+
+.wk-chamber-desc {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  flex-grow: 1;
+}
+
+.wk-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.wk-tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+}
+
+.wk-card-arrow {
+  margin-left: auto;
+  font-size: 1.2rem;
+  color: var(--gold-primary);
+  transform: translateX(0);
+  transition: transform var(--transition-fast);
+}
+
+.wk-chamber-card:hover .wk-card-arrow {
+  transform: translateX(6px);
+  color: var(--gold-bright);
+}
+
+/* Footer */
+.wk-hub-footer {
+  margin-top: auto;
+  text-align: center;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.wk-footer-mono {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+}

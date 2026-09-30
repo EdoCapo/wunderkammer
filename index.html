@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wunderkammer — Cabinet de Curiosités: Arte & Algoritmi</title>
+    <meta
+      name="description"
+      content="Wunderkammer digitale: una camera delle meraviglie interattiva dove la storia dell'arte incontra la fisica ottica, neuroscienze computazionali e computer graphics."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- Background Canvas for Atmospheric Particle Dust & Astrolabe Web -->
+    <canvas id="ambientCanvas" class="wk-ambient-canvas"></canvas>
+
+    <div class="wk-hub-container">
+      <!-- Hero / Chamber Portal Header -->
+      <header class="wk-hub-header">
+        <div class="wk-hub-tagline">
+          <span class="wk-tag-pill">ARCHIVIO COMPUTAZIONALE</span>
+          <span class="wk-tag-coords">45°27'51"N 9°11'22"E // ZERO-BACKEND</span>
+        </div>
+        <h1 class="wk-hub-title">WUNDERKAMMER</h1>
+        <p class="wk-hub-subtitle">Cabinet de Curiosités — Arte, Fisica Ottica & Neuroscienze Algoritmiche</p>
+        <div class="wk-hub-divider">
+          <span class="wk-diamond"></span>
+        </div>
+      </header>
+
+      <!-- Chamber Grid -->
+      <main class="wk-chambers-grid">
+        <!-- Chamber 01 -->
+        <a href="modules/01-pigmenti/index.html" class="wk-chamber-card" data-chamber="01">
+          <div class="wk-card-edge"></div>
+          <div class="wk-card-header">
+            <span class="wk-chamber-num">STANZA 01</span>
+            <span class="wk-card-badge">OTTICA & CHIMICA</span>
+          </div>
+          <h2 class="wk-chamber-name">L'Atelier dei Pigmenti Perduti</h2>
+          <p class="wk-chamber-desc">
+            Modello sottrattivo Kubelka-Munk per pigmenti storici (cinabro, arsenico, lapislazzuli) con simulazione di
+            decadimento foto-chimico e craquelure secolare.
+          </p>
+          <div class="wk-card-footer">
+            <span class="wk-tech-tag">KUBELKA-MUNK</span>
+            <span class="wk-tech-tag">AGING MATRIX</span>
+            <span class="wk-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Chamber 02 -->
+        <a href="modules/02-gestalt/index.html" class="wk-chamber-card" data-chamber="02">
+          <div class="wk-card-edge"></div>
+          <div class="wk-card-header">
+            <span class="wk-chamber-num">STANZA 02</span>
+            <span class="wk-card-badge">PSICOFISICA</span>
+          </div>
+          <h2 class="wk-chamber-name">La Geometria Invisibile</h2>
+          <p class="wk-chamber-desc">
+            Estrazione tensoriale delle direttrici di forza (Sobel/Scharr) e simulazione computazionale del movimento
+            saccadico oculare con modello di salienza e inibizione di ritorno (IoR).
+          </p>
+          <div class="wk-card-footer">
+            <span class="wk-tech-tag">SCHARR TENSORS</span>
+            <span class="wk-tech-tag">ITTI-KOCH SACCADES</span>
+            <span class="wk-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Chamber 03 -->
+        <a href="modules/03-morfogenesi/index.html" class="wk-chamber-card" data-chamber="03">
+          <div class="wk-card-edge"></div>
+          <div class="wk-card-header">
+            <span class="wk-chamber-num">STANZA 03</span>
+            <span class="wk-card-badge">BIOLOGIA TEORICA</span>
+          </div>
+          <h2 class="wk-chamber-name">Morfogenesi su Tela</h2>
+          <p class="wk-chamber-desc">
+            Reazione-diffusione di Gray-Scott a 60 FPS via WebGL 2 ping-pong framebuffers: l'opera d'arte si dissolve e
+            germoglia in pattern di Turing e coralli chimici.
+          </p>
+          <div class="wk-card-footer">
+            <span class="wk-tech-tag">GRAY-SCOTT</span>
+            <span class="wk-tech-tag">WEBGL2 FBO</span>
+            <span class="wk-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Chamber 04 -->
+        <a href="modules/04-restauro/index.html" class="wk-chamber-card" data-chamber="04">
+          <div class="wk-card-edge"></div>
+          <div class="wk-card-header">
+            <span class="wk-chamber-num">STANZA 04</span>
+            <span class="wk-card-badge">DIAGNOSTICA 3D</span>
+          </div>
+          <h2 class="wk-chamber-name">Luce Radente & Tavolo 3D</h2>
+          <p class="wk-chamber-desc">
+            Indagini multispettrali e micro-topografia della materia pittorica in Three.js con luce radente dinamica,
+            radiografia a raggi X e fluorescenza UV (Luce di Wood).
+          </p>
+          <div class="wk-card-footer">
+            <span class="wk-tech-tag">THREE.JS 3D</span>
+            <span class="wk-tech-tag">MULTI-SPECTRAL</span>
+            <span class="wk-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Chamber 05 -->
+        <a href="modules/05-frequenza/index.html" class="wk-chamber-card" data-chamber="05">
+          <div class="wk-card-edge"></div>
+          <div class="wk-card-header">
+            <span class="wk-chamber-num">STANZA 05</span>
+            <span class="wk-card-badge">SINESTESIA</span>
+          </div>
+          <h2 class="wk-chamber-name">La Frequenza dell'Arte</h2>
+          <p class="wk-chamber-desc">
+            Decomposizione dell'immagine tramite Trasformata di Fourier 2D (FFT) e sonificazione radiale dello spettro di
+            potenza in droni armonici e accordi modali (Web Audio API).
+          </p>
+          <div class="wk-card-footer">
+            <span class="wk-tech-tag">FFT 2D</span>
+            <span class="wk-tech-tag">WEB AUDIO DRONE</span>
+            <span class="wk-card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Chamber 06 -->
+        <a href="modules/06-chimera/index.html" class="wk-chamber-card" data-chamber="06">
+          <div class="wk-card-edge"></div>
+          <div class="wk-card-header">
+            <span class="wk-chamber-num">STANZA 06</span>
+            <span class="wk-card-badge">OPEN CULTURAL DATA</span>
+          </div>
+          <h2 class="wk-chamber-name">Il Chimera Museum</h2>
+          <p class="wk-chamber-desc">
+            Generatore di Cadavre Exquis in tempo reale interrogando le collezioni Open Access del Metropolitan Museum di
+            New York con ritaglio procedurale e cartellino museale dinamico.
+          </p>
+          <div class="wk-card-footer">
+            <span class="wk-tech-tag">MET MUSEUM API</span>
+            <span class="wk-tech-tag">PROCEDURAL COLLAGE</span>
+            <span class="wk-card-arrow">→</span>
+          </div>
+        </a>
+      </main>
+
+      <!-- Footer -->
+      <footer class="wk-hub-footer">
+        <p>Wunderkammer • 100% Client-Side Engine • Vite + Three.js + WebGL2 + Web Audio</p>
+        <span class="wk-footer-mono">GITHUB PAGES READY // ZERO RUNTIME COST</span>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

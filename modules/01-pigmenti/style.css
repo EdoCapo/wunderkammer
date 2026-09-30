@@ -1,0 +1,281 @@
+/* Stanza 01 — L'Atelier dei Pigmenti Perduti */
+
+.wk-atelier-workspace {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  background: radial-gradient(circle at 45% 45%, #14171d 0%, var(--bg-void) 90%);
+}
+
+/* Easel and Canvas Area */
+.wk-easel-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.wk-canvas-frame {
+  position: relative;
+  width: min(840px, 90vw);
+  height: min(600px, 72vh);
+  background: #f4ede1;
+  border-radius: var(--radius-sm);
+  box-shadow: 
+    0 18px 45px rgba(0, 0, 0, 0.7),
+    0 0 0 10px #1a1612,
+    0 0 0 12px var(--border-gold),
+    0 0 35px rgba(212, 175, 55, 0.12);
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+/* Simulated Canvas Linen Texture Pattern */
+.wk-canvas-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wk-main-canvas,
+.wk-overlay-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.wk-main-canvas {
+  z-index: 1;
+}
+
+.wk-overlay-canvas {
+  z-index: 3;
+  pointer-events: none;
+}
+
+.wk-canvas-actions {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.wk-btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+}
+
+/* Sidebar & Laboratory HUD */
+.wk-atelier-sidebar {
+  width: 420px;
+  min-width: 360px;
+  max-width: 440px;
+  height: 100%;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .wk-atelier-workspace {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .wk-atelier-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+  .wk-canvas-frame {
+    width: 95vw;
+    height: 50vh;
+  }
+}
+
+/* Pigment Apothecary Selector */
+.wk-pigment-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.wk-pigment-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.35rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-muted);
+}
+
+.wk-pigment-btn:hover {
+  border-color: var(--border-medium);
+  background: var(--bg-panel-elevated);
+}
+
+.wk-pigment-btn.active {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+  color: var(--text-main);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.wk-pigment-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.wk-pigment-label {
+  font-family: var(--font-title);
+  font-size: 0.66rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Pigment Dossier */
+.wk-pigment-dossier {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+}
+
+.wk-dossier-title {
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  color: var(--gold-primary);
+  margin-bottom: 0.3rem;
+}
+
+.wk-dossier-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.wk-mono-tag, .wk-tox-tag, .wk-math-tag, .wk-badge-count {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+}
+
+.wk-mono-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cyan-diagnostic);
+}
+
+.wk-tox-tag {
+  background: rgba(192, 57, 43, 0.18);
+  color: #ff6b6b;
+  border: 1px solid rgba(192, 57, 43, 0.35);
+}
+
+.wk-math-tag, .wk-badge-count {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--gold-primary);
+  border: 1px solid var(--border-gold);
+}
+
+.wk-dossier-desc {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Mixing Mortar */
+.wk-mortar-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+  padding: 0.75rem;
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.wk-mortar-swatch {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border-subtle);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.wk-mortar-hex {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.wk-mortar-physics {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.wk-mortar-ratios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 0.9rem;
+  max-height: 160px;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+
+.wk-ratio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.wk-ratio-name {
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-muted);
+}
+
+.wk-btn-block {
+  width: 100%;
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stanza 01 — L'Atelier dei Pigmenti Perduti | Wunderkammer</title>
+    <link rel="icon" type="image/svg+xml" href="../../public/favicon.svg" />
+    <link rel="stylesheet" href="../../src/shared/ui-kit.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Main Painting Workspace -->
+    <main class="wk-atelier-workspace">
+      <!-- Easel & Canvas Board -->
+      <div class="wk-easel-container">
+        <div class="wk-canvas-frame">
+          <canvas id="paintCanvas" class="wk-main-canvas"></canvas>
+          <canvas id="ageOverlayCanvas" class="wk-overlay-canvas"></canvas>
+        </div>
+
+        <div class="wk-canvas-actions">
+          <button id="btnNewCanvas" class="wk-btn wk-btn-sm" title="Pulisci la tela">Nuova Tela</button>
+          <button id="btnLoadMasterpiece" class="wk-btn wk-btn-sm" title="Carica bozzetto rinascimentale">Bozzetto Storico</button>
+          <button id="btnExport" class="wk-btn wk-btn-sm wk-btn-gold" title="Esporta reperto conservativo">Esporta Reperto</button>
+        </div>
+      </div>
+
+      <!-- Laboratory HUD & Controls Sidebar -->
+      <aside class="wk-atelier-sidebar">
+        <!-- Tab 1: Apothecary & Pigment Palette -->
+        <div class="wk-hud-panel wk-pigments-panel">
+          <div class="wk-hud-title">
+            <span>SPEZIERIA DEI PIGMENTI</span>
+            <span class="wk-badge-count">6 ELEMENTI</span>
+          </div>
+
+          <div class="wk-pigment-selector" id="pigmentGrid">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Active Pigment Chemical Dossier -->
+          <div class="wk-pigment-dossier" id="pigmentDossier">
+            <h4 id="dossierName" class="wk-dossier-title">Cinabro Naturale</h4>
+            <div class="wk-dossier-meta">
+              <span id="dossierFormula" class="wk-mono-tag">α-HgS</span>
+              <span id="dossierToxicity" class="wk-tox-tag">Tossico</span>
+            </div>
+            <p id="dossierHistory" class="wk-dossier-desc">
+              Solfuro di mercurio naturale. Vira lentamente verso metacinabro nero per reazione fotocatalitica.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab 2: Kubelka-Munk Mixing Mortar -->
+        <div class="wk-hud-panel wk-mortar-panel">
+          <div class="wk-hud-title">
+            <span>MORTAIO KUBELKA-MUNK</span>
+            <span class="wk-math-tag">K/S MIXING</span>
+          </div>
+
+          <div class="wk-mortar-display">
+            <div id="mixedSwatch" class="wk-mortar-swatch" style="background-color: #b92823"></div>
+            <div class="wk-mortar-info">
+              <div class="wk-mortar-hex" id="mixedHexVal">#B92823</div>
+              <div class="wk-mortar-physics" id="mixedKsVal">K/S: 0.17 | R∞: 72%</div>
+            </div>
+          </div>
+
+          <div class="wk-mortar-ratios" id="mortarRatios">
+            <!-- Dynamic sliders for mixing ingredients -->
+          </div>
+
+          <button id="btnApplyBrush" class="wk-btn wk-btn-cyan wk-btn-block">Imbevi Pennello nella Miscela</button>
+        </div>
+
+        <!-- Tab 3: Temporal & Environmental Aging Chamber -->
+        <div class="wk-hud-panel wk-aging-panel">
+          <div class="wk-hud-title">
+            <span>CAMERA DI INVECCHIAMENTO ACCELERATO</span>
+            <span class="wk-mono-tag" id="currentYearDisplay">ANNO: 0</span>
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Decorrenza Temporale</span>
+              <span class="wk-control-value" id="valTime">0 anni</span>
+            </label>
+            <input type="range" id="sliderTime" class="wk-slider" min="0" max="500" value="0" step="5" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Radiazione UV (Luce Solare)</span>
+              <span class="wk-control-value" id="valUV">40%</span>
+            </label>
+            <input type="range" id="sliderUV" class="wk-slider" min="0" max="100" value="40" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Umidità Relativa & Idrolisi</span>
+              <span class="wk-control-value" id="valHumidity">55%</span>
+            </label>
+            <input type="range" id="sliderHumidity" class="wk-slider" min="0" max="100" value="55" />
+          </div>
+
+          <div class="wk-control-group">
+            <label class="wk-control-label">
+              <span>Dimensione Pennello</span>
+              <span class="wk-control-value" id="valBrushSize">18px</span>
+            </label>
+            <input type="range" id="sliderBrushSize" class="wk-slider" min="3" max="80" value="18" />
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
